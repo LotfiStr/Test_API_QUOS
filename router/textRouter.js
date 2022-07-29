@@ -9,36 +9,37 @@ const router = express.Router();
  * @param texte Chaine de caracteres.
  * @returns Un tableau trié qui contient le nombre d'apparitions de chaque caractere.
  */
-function compte_caracteres(texte){
-    let caracteres = {};
-    caracteres["total"] = texte.length;
-    for(let i = 0; i < caracteres["total"]; i++){
-        let lettre = texte[i];
-        if(lettre == " "){
-            lettre = "space";
-        }
-        if(caracteres[lettre]){
-            caracteres[lettre]++;
-        }
-        else{
-            caracteres[lettre] = 1;
-        }
+function char_counter(texte){
+    var char = {};
+    char["total"] = texte.length;
+     char["total"] = texte.length;
+     for(let i = 0; i < char["total"]; i++){
+         let x = texte[i];
+         if(x == " "){
+             x = "space";
+         }
+         if(char[x]){
+             char[x]++;
+         }
+         else{
+             char[x] = 1;
+         }
+    } 
+    let select = Object.keys(char).sort();
+    let array = {};
+    if (char["total"]){
+        array["total"] = char ["total"];
     }
-    let trie = Object.keys(caracteres).sort();
-    let newArray = {};
-    if (caracteres["total"]) {
-        newArray["total"] = caracteres["total"];
-    }
-    for (let i = 0; i < trie.length; i++) {
-        if (trie[i] != "total" && trie[i] != "space") {
-            newArray[trie[i]] = caracteres[trie[i]];
-        }
-    }
-    if (caracteres["space"]) {
-        newArray["space"] = caracteres["space"];
-    }
+    for(let i=0; i < select.length; i++){
 
-    return newArray;
+        if (select[i] != "total" && select[i] != "space"){
+            array[select[i]] = char[select[i]];
+        }
+    }
+    if (char["space"]){
+        array["space]"] = char["space"];
+    }
+    return array;
 }
 
 /**
@@ -46,15 +47,15 @@ function compte_caracteres(texte){
  * @param texte Chaine de caracteres.
  * @returns Total de phrases.
  */
-function compte_phrases(texte) {
-    let ponctuation = [".", "!", "?"];
+function sent_counter(texte) {
+    let signs = [".", "!", "?"];
     let total = 0;
 
     if (texte.length > 0) {
         total++;
     }
     for (let i = 0; i < texte.length; i++) {
-        if (ponctuation.includes(texte[i])) {
+        if (signs.includes(texte[i])) {
             total++;
         }
     }
@@ -64,12 +65,12 @@ function compte_phrases(texte) {
 router.get("/characters/count", (req,res) => {
     
     let texte = req.body.text || req.query.text;
-    res.status(200).send(JSON.stringify(compte_caracteres(texte)));
+    res.status(200).send(JSON.stringify(char_counter(texte)));
 });
 
 router.get("/sentences/count", (req,res) => {
     let texte = req.body.text || req.query.text;
-    res.status(200).send(JSON.stringify(compte_phrases(texte)));
+    res.status(200).send(JSON.stringify(sent_counter(texte)));
 });
 
 
